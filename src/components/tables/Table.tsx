@@ -1,12 +1,16 @@
 import React from "react";
-import { useTable } from "react-table";
+import { useTable, useSortBy } from "react-table";
+import { IoCaretDown, IoCaretUp } from "react-icons/io5";
 
 function Table({ columns, data }: any) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({
-      columns,
-      data,
-    });
+    useTable(
+      {
+        columns,
+        data,
+      },
+      useSortBy
+    );
 
   return (
     <>
@@ -15,7 +19,22 @@ function Table({ columns, data }: any) {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <div className="flex items-center">
+                    <span>{column.render("Header")}</span>
+                    <span>
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <IoCaretDown className=" pl-1" />
+                        ) : (
+                          <IoCaretUp className="pl-1" />
+                        )
+                      ) : (
+                        ""
+                      )}
+                    </span>
+                  </div>
+                </th>
               ))}
             </tr>
           ))}
