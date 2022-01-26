@@ -1,17 +1,23 @@
 import React from "react";
-import { useTable, useSortBy } from "react-table";
+import {
+  HeaderGroup,
+  Row,
+} from "react-table";
 import { IoCaretDown, IoCaretUp } from "react-icons/io5";
 
-function Table({ columns, data }: any) {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable(
-      {
-        columns,
-        data,
-      },
-      useSortBy
-    );
-
+function Table({
+  getTableProps,
+  headerGroups,
+  getTableBodyProps,
+  prepareRow,
+  rows,
+}: {
+  getTableProps: any;
+  headerGroups: HeaderGroup<any>[];
+  getTableBodyProps: any;
+  prepareRow: any;
+  rows: Row<any>[];
+}) {
   return (
     <>
       <table {...getTableProps()}>
