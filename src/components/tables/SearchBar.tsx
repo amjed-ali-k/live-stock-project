@@ -1,6 +1,6 @@
 import React from "react";
 import { useAsyncDebounce } from "react-table";
-import TextInput from "../ui/forms/TextInput";
+import { HiOutlineSearch } from "react-icons/hi"; 
 
 function SearchBar({
   preGlobalFilteredRows,
@@ -17,14 +17,18 @@ function SearchBar({
     setGlobalFilter(v || undefined);
   }, 200);
   return (
-    <TextInput
-      value={value || ""}
-      onChange={(e) => {
-        setValue(e.target.value);
-        onChange(e.target.value);
-      }}
-      placeholder={`${count} records...`}
-    />
+    <div className="flex w-full px-3 py-3 leading-tight bg-white border border-gray-200 rounded shadow appearance-none text-cyan-700 focus:outline-1 focus:shadow-outline">
+     <HiOutlineSearch  size={20} className="mr-2"/>
+      <input
+        value={value || ""}
+        onChange={(e) => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
+        placeholder={`${count} records...`}
+        className="focus:outline-none"
+      />
+    </div>
   );
 }
 

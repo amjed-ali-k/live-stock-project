@@ -54,19 +54,28 @@ function StockManagment() {
   );
 
   return (
-    <div>
+    <div className="m-3">
       <SearchBar
         preGlobalFilteredRows={preGlobalFilteredRows}
         setGlobalFilter={setGlobalFilter}
         globalFilter={state.globalFilter}
       />
-      <Table
-        getTableProps={getTableProps}
-        getTableBodyProps={getTableBodyProps}
-        headerGroups={headerGroups}
-        rows={rows}
-        prepareRow={prepareRow}
-      />
+      <div className="mt-3 overflow-hidden bg-white rounded shadow-md">
+        <div className="py-3">
+          <h3 className="pt-2 pl-4 text-lg font-bold text-gray-700">
+            Stock Management
+          </h3>
+        </div>
+        <div className="">
+          <Table
+            getTableProps={getTableProps}
+            getTableBodyProps={getTableBodyProps}
+            headerGroups={headerGroups}
+            rows={rows}
+            prepareRow={prepareRow}
+          />
+        </div>
+      </div>
     </div>
   );
 }
