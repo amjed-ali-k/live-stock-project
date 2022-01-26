@@ -9,12 +9,27 @@ function Table({
   getTableBodyProps,
   prepareRow,
   rows,
+  pageOptions,
+  page,
+  gotoPage,
+  canPreviousPage,
+  canNextPage,
+  pageIndex,
 }: {
   getTableProps: any;
   headerGroups: HeaderGroup<any>[];
   getTableBodyProps: any;
   prepareRow: any;
   rows: Row<any>[];
+  pageOptions: any;
+  page: Row<any>[];
+  gotoPage: any;
+  previousPage: any;
+  nextPage: any;
+  setPageSize: any;
+  canPreviousPage: any;
+  canNextPage: any;
+  pageIndex: number;
 }) {
   const firstPageRows = rows.slice(0, 100);
   return (
@@ -40,7 +55,7 @@ function Table({
           {...getTableBodyProps()}
           className="text-gray-700 bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-400"
         >
-          {firstPageRows.map((row, i) => {
+          {page.map((row, i) => {
             prepareRow(row);
             return <TableRow row={row} {...row.getRowProps()} />;
           })}
@@ -52,7 +67,13 @@ function Table({
         <div className="py-4 text-center">No items found</div>
       )}
       <div>
-        <Pagination />
+        <Pagination
+          canPreviousPage={canPreviousPage}
+          canNextPage={canNextPage}
+          pageIndex={pageIndex}
+          pageOptions={pageOptions}
+          gotoPage={gotoPage}
+        />
       </div>
     </>
   );
@@ -109,6 +130,7 @@ function TableRow({ row, ...props }: { row: any }) {
       {...props}
       className="hover:bg-slate-200 hover:bg-opacity-10"
       onClick={() => inputRef.current?.focus()}
+
     >
       {/* {row.cells.map((cell) => {
       return (
@@ -198,18 +220,36 @@ function LevelIndicator({
   );
 }
 
-function Pagination() {
-  function Butn({ children }: { children: React.ReactNode }) {
+function Pagination({
+  pageIndex,
+  pageOptions,
+  gotoPage,
+  canPreviousPage,
+  canNextPage,
+}: any) {
+  function Butn({
+    children,
+    onClick,
+  }: {
+    children: React.ReactNode;
+    onClick: () => void;
+  }) {
     return (
-      <div className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-50">
+      <button
+        onClick={() => onClick()}
+        className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-50"
+      >
         {children}
-      </div>
+      </button>
     );
   }
 
   function Previous() {
     return (
-      <div className="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50">
+      <div
+        onClick={() => gotoPage(0)}
+        className="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50"
+      >
         <GoChevronLeft />
       </div>
     );
@@ -217,7 +257,10 @@ function Pagination() {
 
   function Next() {
     return (
-      <div className="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50">
+      <div
+        onClick={() => gotoPage(pageOptions.length - 1)}
+        className="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50"
+      >
         <GoChevronRight />
       </div>
     );
@@ -229,9 +272,8 @@ function Pagination() {
         <div className="flex items-center justify-between flex-1">
           <div>
             <p className="text-sm text-gray-700">
-              Showing <span className="font-medium">1</span> to{" "}
-              <span className="font-medium">10</span> of{" "}
-              <span className="font-medium">97</span> results
+              Showing <span className="font-medium">{pageIndex + 1}</span> of{" "}
+              <span className="font-medium">{pageOptions.length} </span> page
             </p>
           </div>
           <div>
@@ -240,8 +282,21 @@ function Pagination() {
               aria-label="Pagination"
             >
               <Previous />
-              <Butn>1</Butn>
-              <Butn>2</Butn>
+              {canPreviousPage && (
+                <Butn onClick={() => gotoPage(pageIndex - 1)}>{pageIndex}</Butn>
+              )}
+              <Butn
+                onClick={() => {
+                  return;
+                }}
+              >
+                {pageIndex + 1}
+              </Butn>
+              {canNextPage && (
+                <Butn onClick={() => gotoPage(pageIndex + 1)}>
+                  {pageIndex + 2}
+                </Butn>
+              )}
               <Next />
             </nav>
           </div>
@@ -250,7 +305,6 @@ function Pagination() {
     </div>
   );
 }
-
 
 function RequriementChart({
   lastYear = 65,

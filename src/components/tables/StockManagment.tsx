@@ -35,6 +35,7 @@ function StockManagment() {
   );
   const data = React.useMemo(() => fakeData, []);
 
+  
   const {
     getTableProps,
     getTableBodyProps,
@@ -62,6 +63,8 @@ function StockManagment() {
     usePagination,
   );
 
+
+
   return (
     <div className="m-3">
       <SearchBar
@@ -82,6 +85,15 @@ function StockManagment() {
             headerGroups={headerGroups}
             rows={rows}
             prepareRow={prepareRow}
+            pageOptions={pageOptions}
+            page={page}
+            gotoPage={gotoPage}
+            previousPage={previousPage}
+            nextPage={nextPage}
+            setPageSize={setPageSize}
+            canPreviousPage={canPreviousPage}
+            canNextPage={canNextPage}
+            pageIndex={state.pageIndex}
           />
         </div>
       </div>
