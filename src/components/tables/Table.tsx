@@ -1,7 +1,8 @@
 import React from "react";
 import { HeaderGroup, Row } from "react-table";
-import { IoCaretDown, IoCaretUp, IoCloudyNight } from "react-icons/io5";
-
+import { IoCaretDown, IoCaretUp } from "react-icons/io5";
+import { MdLocalGroceryStore } from "react-icons/md";
+import { GoChevronLeft, GoChevronRight } from "react-icons/go";
 function Table({
   getTableProps,
   headerGroups,
@@ -45,47 +46,36 @@ function Table({
           })}
         </tbody>
       </table>
-      {
-        rows.length > 0 ? "" : <div className="py-4 text-center">No items found</div>
-      }
+      {rows.length > 0 ? (
+        ""
+      ) : (
+        <div className="py-4 text-center">No items found</div>
+      )}
+      <div>
+        <Pagination />
+      </div>
     </>
   );
 }
 
 export default Table;
 
-function LevelIndicator({
-  value,
-  maxvalue = 100,
-}: {
-  value: number;
-  maxvalue?: number;
-}) {
-  const percent = (value / maxvalue) * 100;
-  if (percent > 30) {
-    return (
-      <div className="flex items-center">
-        <div className="w-2 h-2 mr-1 bg-green-400 rounded-full"></div>
-        <div className="text-[10px] font-semibold text-green-400">Good</div>
-      </div>
-    );
-  }
-  if (percent > 10) {
-    return (
-      <div className="flex items-center">
-        <div className="w-2 h-2 mr-1 bg-yellow-500 rounded-full"></div>
-        <div className="text-[10px] font-semibold text-yellow-500">Meduim</div>
-      </div>
-    );
-  }
-
+const TextInput = React.forwardRef<
+  HTMLInputElement,
+  React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  >
+>((props, ref) => {
   return (
-    <div className="flex items-center">
-      <div className="w-2 h-2 mr-1 bg-red-600 rounded-full"></div>
-      <div className="text-[10px] font-semibold text-red-600">Urgent</div>
-    </div>
+    <input
+      ref={ref}
+      type="text"
+      {...props}
+      className="w-full px-3 py-1 font-bold leading-tight border border-gray-200 rounded shadow appearance-none text-cyan-700 focus:outline-none focus:shadow-outline"
+    ></input>
   );
-}
+});
 
 function HeaderColumn({ column }: { column: any }) {
   return (
@@ -111,49 +101,6 @@ function HeaderColumn({ column }: { column: any }) {
   );
 }
 
-function RequriementChart({
-  lastYear = 65,
-  lastMonth = 54,
-  currentMonth = 0,
-}: {
-  lastYear?: number;
-  lastMonth?: number;
-  currentMonth?: number;
-}) {
-  const maxVal = Math.max(lastYear, lastMonth, currentMonth);
-  function Bar({
-    v,
-    m,
-    className = "bg-blue-500",
-  }: {
-    v: number;
-    m: number;
-    className?: string;
-  }) {
-    return (
-      <div className="flex items-center leading-none cursor-pointer group">
-        <div className="mr-1 text-[11px] font-medium text-gray-500">{v}</div>
-        <div className="w-full">
-          <div
-            style={{ width: `${(v / m) * 100}%` }}
-            className={
-              "h-[5px] rounded-lg group-hover:bg-opacity-80 " + className
-            }
-          ></div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <Bar v={lastYear} m={maxVal} />
-      <Bar v={lastMonth} m={maxVal} />
-      <Bar v={currentMonth} m={maxVal} className="bg-green-500" />
-    </div>
-  );
-}
-
 function TableRow({ row, ...props }: { row: any }) {
   const inputRef = React.createRef<HTMLInputElement>();
   const [val, setVal] = React.useState<string>();
@@ -174,7 +121,7 @@ function TableRow({ row, ...props }: { row: any }) {
       <td role="cell" className="text-left">
         <div className="flex items-center">
           <div className="p-2 mr-2 text-green-500 bg-green-500 rounded-full bg-opacity-10">
-            <IoCloudyNight />
+            <MdLocalGroceryStore />
           </div>
           <div className="flex-grow">
             <div className="text-sm font-bold ">
@@ -218,19 +165,132 @@ function TableRow({ row, ...props }: { row: any }) {
   );
 }
 
-const TextInput = React.forwardRef<
-  HTMLInputElement,
-  React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  >
->((props, ref) => {
+function LevelIndicator({
+  value,
+  maxvalue = 100,
+}: {
+  value: number;
+  maxvalue?: number;
+}) {
+  const percent = (value / maxvalue) * 100;
+  if (percent > 30) {
+    return (
+      <div className="flex items-center">
+        <div className="w-2 h-2 mr-1 bg-green-400 rounded-full"></div>
+        <div className="text-[10px] font-semibold text-green-400">Good</div>
+      </div>
+    );
+  }
+  if (percent > 10) {
+    return (
+      <div className="flex items-center">
+        <div className="w-2 h-2 mr-1 bg-yellow-500 rounded-full"></div>
+        <div className="text-[10px] font-semibold text-yellow-500">Meduim</div>
+      </div>
+    );
+  }
+
   return (
-    <input
-      ref={ref}
-      type="text"
-      {...props}
-      className="w-full px-3 py-1 font-bold leading-tight border border-gray-200 rounded shadow appearance-none text-cyan-700 focus:outline-none focus:shadow-outline"
-    ></input>
+    <div className="flex items-center">
+      <div className="w-2 h-2 mr-1 bg-red-600 rounded-full"></div>
+      <div className="text-[10px] font-semibold text-red-600">Urgent</div>
+    </div>
   );
-});
+}
+
+function Pagination() {
+  function Butn({ children }: { children: React.ReactNode }) {
+    return (
+      <div className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-50">
+        {children}
+      </div>
+    );
+  }
+
+  function Previous() {
+    return (
+      <div className="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50">
+        <GoChevronLeft />
+      </div>
+    );
+  }
+
+  function Next() {
+    return (
+      <div className="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50">
+        <GoChevronRight />
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between px-4 py-3">
+        <div className="flex items-center justify-between flex-1">
+          <div>
+            <p className="text-sm text-gray-700">
+              Showing <span className="font-medium">1</span> to{" "}
+              <span className="font-medium">10</span> of{" "}
+              <span className="font-medium">97</span> results
+            </p>
+          </div>
+          <div>
+            <nav
+              className="relative z-0 inline-flex -space-x-px rounded-md shadow-sm"
+              aria-label="Pagination"
+            >
+              <Previous />
+              <Butn>1</Butn>
+              <Butn>2</Butn>
+              <Next />
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+function RequriementChart({
+  lastYear = 65,
+  lastMonth = 54,
+  currentMonth = 0,
+}: {
+  lastYear?: number;
+  lastMonth?: number;
+  currentMonth?: number;
+}) {
+  const maxVal = Math.max(lastYear, lastMonth, currentMonth);
+  function Bar({
+    v,
+    m,
+    className = "bg-blue-500",
+  }: {
+    v: number;
+    m: number;
+    className?: string;
+  }) {
+    return (
+      <div className="flex items-center leading-none cursor-pointer group">
+        <div className="mr-1 text-[11px] font-medium text-gray-500">{v}</div>
+        <div className="w-full">
+          <div
+            style={{ width: `${(v / m) * 100}%` }}
+            className={
+              "h-[5px] rounded-lg group-hover:bg-opacity-80 " + className
+            }
+          ></div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <Bar v={lastYear} m={maxVal} />
+      <Bar v={lastMonth} m={maxVal} />
+      <Bar v={currentMonth} m={maxVal} className="bg-green-500" />
+    </div>
+  );
+}

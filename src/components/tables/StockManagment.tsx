@@ -1,7 +1,7 @@
 import React from "react";
 import Table from "./Table";
 import fakeData from "../../constants/MOCK_DATA.json";
-import { useGlobalFilter, useSortBy, useTable } from "react-table";
+import { useGlobalFilter, useSortBy, useTable, usePagination, } from "react-table";
 import SearchBar from "./SearchBar";
 
 // {"id":1,"name":"Wine - White, Concha Y Toro","in_stock":47,"price":"$33.90","supplier":"Walter Group","sales":77,"image":"http://dummyimage.com/139x175.png/cc0000/ffffff"}
@@ -44,13 +44,22 @@ function StockManagment() {
     preGlobalFilteredRows,
     setGlobalFilter,
     state,
+    pageOptions,
+    page,
+    gotoPage,
+    previousPage,
+    nextPage,
+    setPageSize,
+    canPreviousPage,
+    canNextPage,
   } = useTable(
     {
       columns,
       data,
     },
     useGlobalFilter,
-    useSortBy
+    useSortBy,
+    usePagination,
   );
 
   return (
