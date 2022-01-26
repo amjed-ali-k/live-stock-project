@@ -4,6 +4,7 @@ import {
   Row,
 } from "react-table";
 import { IoCaretDown, IoCaretUp } from "react-icons/io5";
+import ChartColumn from "./ChartColumn";
 
 function Table({
   getTableProps,
@@ -18,6 +19,8 @@ function Table({
   prepareRow: any;
   rows: Row<any>[];
 }) {
+
+  const firstPageRows = rows.slice(0, 10);
   return (
     <>
       <table {...getTableProps()}>
@@ -42,11 +45,12 @@ function Table({
                   </div>
                 </th>
               ))}
+              <th>History</th>
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
+          {firstPageRows.map((row, i) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
@@ -55,6 +59,7 @@ function Table({
                     <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                   );
                 })}
+                <td><ChartColumn height={100}/></td>
               </tr>
             );
           })}
