@@ -50,7 +50,7 @@ function StockManagment() {
   );
 
   React.useEffect(() => {
-    fetch('/MOCK_DATA.json').then(res => res.json()).then(data => {setData(data)})
+    fetch('/MOCK_DATA.json').then(res => res.json()).then(dd => {setData(dd)})
   }, [])
 
 
@@ -83,6 +83,15 @@ function StockManagment() {
     useSortBy,
     usePagination
   );
+
+  if (data.length === 0) {
+    return <>
+     <div className="w-full h-16 p-1 mx-auto my-3 border rounded-md bg-slate-300 animate-pulse"></div>
+     <div className="w-full h-16 p-1 mx-auto my-3 border rounded-md bg-slate-300 animate-pulse"></div>
+     <div className="w-full h-16 p-1 mx-auto my-3 border rounded-md bg-slate-300 animate-pulse"></div>
+    </>
+  }
+
   return (
     <div className="m-3">
       <SearchBar
