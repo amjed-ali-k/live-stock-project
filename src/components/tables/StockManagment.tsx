@@ -179,7 +179,6 @@ function DepotFilter({
   };
 }) {
   const depotIds = ["CAN-01", "KSD-11", "MLP-03", "KKD-11", "MLP-01", "CAN-04"];
-  console.log({ filterValue, setFilter, preFilteredRows, id });
   // Render a multi-select box
   return (
     <>
