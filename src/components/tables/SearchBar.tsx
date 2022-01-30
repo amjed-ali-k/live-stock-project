@@ -26,7 +26,7 @@ function SearchBar({
           onChange(e.target.value);
         }}
         placeholder={`${count} records...`}
-        className="focus:outline-none"
+        className="w-full focus:outline-none"
       />
     </div>
   );

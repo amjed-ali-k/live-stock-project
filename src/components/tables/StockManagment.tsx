@@ -1,6 +1,6 @@
 import React from "react";
 import Table from "./Table";
-import fakeData from "../../constants/MOCK_DATA.json";
+
 import {
   useFilters,
   useGlobalFilter,
@@ -11,11 +11,12 @@ import {
 import SearchBar from "./SearchBar";
 import SelectInput from "./SelectInput";
 
+
 // {"id":1,"name":"Wine - White, Concha Y Toro","in_stock":47,"price":"$33.90","supplier":"Walter Group","sales":77,"image":"http://dummyimage.com/139x175.png/cc0000/ffffff"}
 
 function StockManagment() {
   const [cr, setCr] = React.useState<{ [key: string]: string }>({});
-
+  const [_data, setData] = React.useState<any[]>([]);
   const columns: any = React.useMemo(
     () => [
       { Header: "ID", accessor: "id" },
@@ -47,7 +48,13 @@ function StockManagment() {
     ],
     []
   );
-  const data = React.useMemo(() => fakeData, []);
+
+  React.useEffect(() => {
+    fetch('/MOCK_DATA.json').then(res => res.json()).then(data => {setData(data)})
+  }, [])
+
+
+  const data = React.useMemo(() => _data, [_data]);
 
   const {
     getTableProps,
@@ -109,7 +116,7 @@ function StockManagment() {
             onClick={() =>
               alert(
                 
-                  Object.keys(cr).map((v) => `${fakeData[Number(v)-1].name} : ${cr[v]}`).join("\n")
+                 _data &&  Object.keys(cr).map((v) => `${_data[Number(v)-1].name} : ${cr[v]}`).join("\n")
                 
               )
             }
