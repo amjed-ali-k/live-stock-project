@@ -1,5 +1,4 @@
 import React from "react";
-import { HiChevronDown } from "react-icons/hi";
 
 function SelectInput({ children, ...props }: React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>) {
   return (

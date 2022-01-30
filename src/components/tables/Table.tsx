@@ -2,7 +2,13 @@ import React from "react";
 import { HeaderGroup, Row } from "react-table";
 import { IoCaretDown, IoCaretUp } from "react-icons/io5";
 import { MdLocalGroceryStore } from "react-icons/md";
-import { GoChevronLeft, GoChevronRight } from "react-icons/go";
+import {
+  BiChevronsLeft,
+  BiChevronsRight,
+  BiChevronRight,
+  BiChevronLeft,
+} from "react-icons/bi";
+
 function Table({
   getTableProps,
   headerGroups,
@@ -315,7 +321,7 @@ function Pagination({
         onClick={() => gotoPage(0)}
         className="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50"
       >
-        <GoChevronLeft />
+        <BiChevronsLeft />
       </div>
     );
   }
@@ -326,7 +332,7 @@ function Pagination({
         onClick={() => gotoPage(pageOptions.length - 1)}
         className="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50"
       >
-        <GoChevronRight />
+        <BiChevronsRight />
       </div>
     );
   }
@@ -348,7 +354,9 @@ function Pagination({
             >
               <Previous />
               {canPreviousPage && (
-                <Butn onClick={() => gotoPage(pageIndex - 1)}>{pageIndex}</Butn>
+                <Butn onClick={() => gotoPage(pageIndex - 1)}>
+                  <BiChevronLeft />
+                </Butn>
               )}
               <Butn
                 onClick={() => {
@@ -359,7 +367,7 @@ function Pagination({
               </Butn>
               {canNextPage && (
                 <Butn onClick={() => gotoPage(pageIndex + 1)}>
-                  {pageIndex + 2}
+                  <BiChevronRight />
                 </Butn>
               )}
               <Next />
