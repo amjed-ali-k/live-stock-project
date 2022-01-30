@@ -15,6 +15,8 @@ function Table({
   canPreviousPage,
   canNextPage,
   pageIndex,
+  cr,
+  setCr,
 }: {
   getTableProps: any;
   headerGroups: HeaderGroup<any>[];
@@ -30,6 +32,8 @@ function Table({
   canPreviousPage: any;
   canNextPage: any;
   pageIndex: number;
+  cr: { [key: string]: string };
+  setCr: (e: { [key: string]: string }) => void;
 }) {
   return (
     <>
@@ -56,7 +60,14 @@ function Table({
         >
           {page.map((row, i) => {
             prepareRow(row);
-            return <TableRow row={row} {...row.getRowProps()} />;
+            return (
+              <TableRow
+                row={row}
+                {...row.getRowProps()}
+                cr={cr}
+                setCr={setCr}
+              />
+            );
           })}
         </tbody>
       </table>
@@ -121,9 +132,20 @@ function HeaderColumn({ column }: { column: any }) {
   );
 }
 
-function TableRow({ row, ...props }: { row: any }) {
+function TableRow({
+  row,
+  cr,
+  setCr,
+  ...props
+}: {
+  row: any;
+  cr: { [key: string]: string };
+  setCr: (e: { [key: string]: string }) => void;
+}) {
   const inputRef = React.createRef<HTMLInputElement>();
-  const [val, setVal] = React.useState<string>();
+  const val = cr[row.original.id];
+  const setVal = (e: string) => setCr({ ...cr, [row.original.id]: e });
+
   return (
     <tr
       {...props}

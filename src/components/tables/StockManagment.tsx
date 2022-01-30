@@ -14,6 +14,8 @@ import SelectInput from "./SelectInput";
 // {"id":1,"name":"Wine - White, Concha Y Toro","in_stock":47,"price":"$33.90","supplier":"Walter Group","sales":77,"image":"http://dummyimage.com/139x175.png/cc0000/ffffff"}
 
 function StockManagment() {
+  const [cr, setCr] = React.useState<{ [key: string]: string }>({});
+
   const columns: any = React.useMemo(
     () => [
       { Header: "ID", accessor: "id" },
@@ -81,23 +83,39 @@ function StockManagment() {
         setGlobalFilter={setGlobalFilter}
         globalFilter={state.globalFilter}
       />
-      <div className="flex items-center">
-        <div className="my-2 w-52">
-          <div className="mb-2 text-sm text-gray-600">Items Per page:</div>
-          <SelectInput
-            value={state.pageSize}
-            onChange={(v) => {
-              setPageSize(Number(v.target.value));
-            }}
-          >
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </SelectInput>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <div className="my-2 w-52">
+            <div className="mb-2 text-sm text-gray-600">Items Per page:</div>
+            <SelectInput
+              value={state.pageSize}
+              onChange={(v) => {
+                setPageSize(Number(v.target.value));
+              }}
+            >
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </SelectInput>
+          </div>
+          <div className="mx-2 w-52">
+            <DepotFilter column={headerGroups[0].headers[6]} />
+          </div>
         </div>
-        <div className="mx-2 w-52">
-          <DepotFilter column={headerGroups[0].headers[6]} />
+        <div>
+          <button
+            className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+            onClick={() =>
+              alert(
+                
+                  Object.keys(cr).map((v) => `${fakeData[Number(v)-1].name} : ${cr[v]}`).join("\n")
+                
+              )
+            }
+          >
+            Send Requirement
+          </button>
         </div>
       </div>
 
@@ -123,6 +141,8 @@ function StockManagment() {
             canPreviousPage={canPreviousPage}
             canNextPage={canNextPage}
             pageIndex={state.pageIndex}
+            cr={cr}
+            setCr={setCr}
           />
         </div>
       </div>
