@@ -31,7 +31,6 @@ function Table({
   canNextPage: any;
   pageIndex: number;
 }) {
-  const firstPageRows = rows.slice(0, 100);
   return (
     <>
       <table {...getTableProps()} className="w-full table-auto">
@@ -130,7 +129,6 @@ function TableRow({ row, ...props }: { row: any }) {
       {...props}
       className="hover:bg-slate-200 hover:bg-opacity-10"
       onClick={() => inputRef.current?.focus()}
-
     >
       {/* {row.cells.map((cell) => {
       return (
@@ -166,15 +164,60 @@ function TableRow({ row, ...props }: { row: any }) {
         <div className="w-20 text-sm">
           <TextInput
             ref={inputRef}
-            type="number"
-            onChange={(e) => setVal(e.target.value)}
+            type="text"
+            onChange={(e) => {
+              if (!isNaN(Number(e.target.value))) setVal(e.target.value);
+              if (e.target.value.endsWith("%")) {
+                const _val = e.target.value.slice(0, -1);
+                const hist = Number(
+                  row.original["requirements_history"]["last_month"]
+                );
+                let newVal = (hist * Number(_val)) / 100;
+                // if(val.startsWith("-")) newVal = hist - newVal
+                newVal = hist + newVal;
+                if (newVal < 0) newVal = 0;
+                newVal = Math.floor(newVal);
+                setVal(Number(newVal).toString());
+              }
+              if (
+                e.target.value.startsWith("-") &&
+                !isNaN(Number(e.target.value.slice(1)))
+              )
+                setVal(e.target.value);
+              if (
+                e.target.value.startsWith("+") &&
+                !isNaN(Number(e.target.value.slice(1)))
+              )
+                setVal(e.target.value);
+            }}
             value={val}
+            onBlur={(e) => {
+              let _val = 0;
+              if (e.target.value.startsWith("-")) {
+                _val =
+                  Number(row.original["requirements_history"]["last_month"]) -
+                  Number(e.target.value.slice(1));
+                if (Number(_val) > 0) setVal(_val.toString());
+                else setVal("0");
+              }
+              if (e.target.value.startsWith("+")) {
+                _val =
+                  Number(e.target.value.slice(1)) +
+                  Number(row.original["requirements_history"]["last_month"]);
+                if (Number(_val) > 0) setVal(_val.toString());
+                else setVal("0");
+              }
+            }}
           />
         </div>
       </td>
       <td>
         <div className="">
-          <RequriementChart currentMonth={Number(val || 0)} />
+          <RequriementChart
+            currentMonth={Number(val || 0)}
+            lastMonth={row.original["requirements_history"]["last_month"]}
+            lastYear={row.original["requirements_history"]["last_year_month"]}
+          />
         </div>
       </td>
       <td role="cell" className="px-2 text-left">
@@ -327,7 +370,9 @@ function RequriementChart({
   }) {
     return (
       <div className="flex items-center leading-none cursor-pointer group">
-        <div className="mr-1 text-[11px] font-medium text-gray-500">{v}</div>
+        <div className="mr-1 text-[11px] font-medium text-gray-500">
+          {v < 10 && v >= 0 ? "0" + v : v}
+        </div>
         <div className="w-full">
           <div
             style={{ width: `${(v / m) * 100}%` }}
