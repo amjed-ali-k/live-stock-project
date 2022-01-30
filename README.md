@@ -1,12 +1,12 @@
 # Tasks
     [*] Initialize Repository
-    [ ] Create Fake Stock Data
-    [ ] Create Stock list table
-    [ ] Add sort, filter and search functions
+    [*] Create Fake Stock Data
+    [*] Create Stock list table
+    [*] Add sort, filter and search functions
     [ ] Create Charts - Apex charts | Chart Js
     [ ] Implement Routes for Data submission and confirmations
     [ ] Add Toasts for Flash messages
-    [ ] Create UI using Tailwind Css. (Bloom UI)
+    [*] Create UI using Tailwind Css. (Bloom UI)
     [ ] Create whole dashboard
     [ ] Test the final code.
 
