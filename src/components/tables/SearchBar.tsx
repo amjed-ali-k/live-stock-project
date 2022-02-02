@@ -11,7 +11,6 @@ function SearchBar({
   globalFilter: string;
   setGlobalFilter: (value?: string) => void;
 }) {
-  const count = preGlobalFilteredRows.length;
   const [value, setValue] = React.useState(globalFilter);
   const onChange = useAsyncDebounce((v: string) => {
     setGlobalFilter(v || undefined);

@@ -274,7 +274,7 @@ function TableRow({
               instock={row.original.in_stock}
               name={row.original.name}
               price={row.original.price}
-              image="https://picsum.photos/300/200"
+              image={`https://picsum.photos/300/200?${row.original.id}`}
               sales={row.original.sales}
             />
           </td>
