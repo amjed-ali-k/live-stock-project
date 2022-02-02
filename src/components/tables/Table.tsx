@@ -8,6 +8,8 @@ import {
   BiChevronRight,
   BiChevronLeft,
 } from "react-icons/bi";
+import ProductInfo from "./ProductInfo";
+import { FaTimes } from "react-icons/fa";
 
 function Table({
   getTableProps,
@@ -151,110 +153,134 @@ function TableRow({
   const inputRef = React.createRef<HTMLInputElement>();
   const val = cr[row.original.id];
   const setVal = (e: string) => setCr({ ...cr, [row.original.id]: e });
+  const [showDetails, setShowDetails] = React.useState(false);
 
   return (
-    <tr
-      {...props}
-      className="hover:bg-slate-200 hover:bg-opacity-10"
-      onClick={() => inputRef.current?.focus()}
-    >
-      {/* {row.cells.map((cell) => {
+    <>
+      <tr
+        {...props}
+        className="cursor-pointer hover:bg-slate-200 hover:bg-opacity-10"
+        onClick={() => setShowDetails(!showDetails)}
+      >
+        {/* {row.cells.map((cell) => {
       return (
         <td {...cell.getCellProps()} className="px-4 py-1">{cell.render("Cell")}</td>
       );
     })} */}
-      <td role="cell" className="text-center">
-        {row.cells[0].render("Cell")}
-      </td>
-      <td role="cell" className="text-left">
-        <div className="flex items-center">
-          <div className="p-2 mr-2 text-green-500 bg-green-500 rounded-full bg-opacity-10">
-            <MdLocalGroceryStore />
-          </div>
-          <div className="flex-grow">
-            <div className="text-sm font-bold ">
-              {row.cells[1].render("Cell")}
+        <td role="cell" className="text-center">
+          {row.cells[0].render("Cell")}
+        </td>
+        <td role="cell" className="text-left">
+          <div className="flex items-center">
+            <div className="p-2 mr-2 text-green-500 bg-green-500 rounded-full bg-opacity-10">
+              <MdLocalGroceryStore />
             </div>
-            <div className="text-xs font-semibold text-gray-300">
-              #{row.original.id}
+            <div className="flex-grow">
+              <div className="text-sm font-bold ">
+                {row.cells[1].render("Cell")}
+              </div>
+              <div className="text-xs font-semibold text-gray-300">
+                #{row.original.id}
+              </div>
             </div>
           </div>
-        </div>
-      </td>
-      <td role="cell" className="">
-        <div className="ml-2 text-lg font-semibold">
-          {row.cells[2].render("Cell")}
-        </div>
-        <LevelIndicator value={row.original.in_stock} />
-      </td>
+        </td>
+        <td role="cell" className="">
+          <div className="ml-2 text-lg font-semibold">
+            {row.cells[2].render("Cell")}
+          </div>
+          <LevelIndicator value={row.original.in_stock} />
+        </td>
 
-      <td>
-        <div className="w-20 text-sm">
-          <TextInput
-            ref={inputRef}
-            type="text"
-            onChange={(e) => {
-              if (!isNaN(Number(e.target.value))) setVal(e.target.value);
-              if (e.target.value.endsWith("%")) {
-                const _val = e.target.value.slice(0, -1);
-                const hist = Number(
-                  row.original["requirements_history"]["last_month"]
-                );
-                let newVal = (hist * Number(_val)) / 100;
-                // if(val.startsWith("-")) newVal = hist - newVal
-                newVal = hist + newVal;
-                if (newVal < 0) newVal = 0;
-                newVal = Math.floor(newVal);
-                setVal(Number(newVal).toString());
-              }
-              if (
-                e.target.value.startsWith("-") &&
-                !isNaN(Number(e.target.value.slice(1)))
-              )
-                setVal(e.target.value);
-              if (
-                e.target.value.startsWith("+") &&
-                !isNaN(Number(e.target.value.slice(1)))
-              )
-                setVal(e.target.value);
-            }}
-            value={val}
-            onBlur={(e) => {
-              let _val = 0;
-              if (e.target.value.startsWith("-")) {
-                _val =
-                  Number(row.original["requirements_history"]["last_month"]) -
-                  Number(e.target.value.slice(1));
-                if (Number(_val) > 0) setVal(_val.toString());
-                else setVal("0");
-              }
-              if (e.target.value.startsWith("+")) {
-                _val =
-                  Number(e.target.value.slice(1)) +
-                  Number(row.original["requirements_history"]["last_month"]);
-                if (Number(_val) > 0) setVal(_val.toString());
-                else setVal("0");
-              }
-            }}
-          />
-        </div>
-      </td>
-      <td>
-        <div className="">
-          <RequriementChart
-            currentMonth={Number(val || 0)}
-            lastMonth={row.original["requirements_history"]["last_month"]}
-            lastYear={row.original["requirements_history"]["last_year_month"]}
-          />
-        </div>
-      </td>
-      <td role="cell" className="px-2 text-left">
-        {row.cells[5].render("Cell")}
-      </td>
-      <td role="cell" className="text-center">
-        {row.cells[3].render("Cell")}
-      </td>
-    </tr>
+        <td>
+          <div className="w-20 text-sm">
+            <TextInput
+              ref={inputRef}
+              type="text"
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) setVal(e.target.value);
+                if (e.target.value.endsWith("%")) {
+                  const _val = e.target.value.slice(0, -1);
+                  const hist = Number(
+                    row.original["requirements_history"]["last_month"]
+                  );
+                  let newVal = (hist * Number(_val)) / 100;
+                  // if(val.startsWith("-")) newVal = hist - newVal
+                  newVal = hist + newVal;
+                  if (newVal < 0) newVal = 0;
+                  newVal = Math.floor(newVal);
+                  setVal(Number(newVal).toString());
+                }
+                if (
+                  e.target.value.startsWith("-") &&
+                  !isNaN(Number(e.target.value.slice(1)))
+                )
+                  setVal(e.target.value);
+                if (
+                  e.target.value.startsWith("+") &&
+                  !isNaN(Number(e.target.value.slice(1)))
+                )
+                  setVal(e.target.value);
+              }}
+              value={val}
+              onBlur={(e) => {
+                let _val = 0;
+                if (e.target.value.startsWith("-")) {
+                  _val =
+                    Number(row.original["requirements_history"]["last_month"]) -
+                    Number(e.target.value.slice(1));
+                  if (Number(_val) > 0) setVal(_val.toString());
+                  else setVal("0");
+                }
+                if (e.target.value.startsWith("+")) {
+                  _val =
+                    Number(e.target.value.slice(1)) +
+                    Number(row.original["requirements_history"]["last_month"]);
+                  if (Number(_val) > 0) setVal(_val.toString());
+                  else setVal("0");
+                }
+              }}
+            />
+          </div>
+        </td>
+        <td>
+          <div className="">
+            <RequriementChart
+              currentMonth={Number(val || 0)}
+              lastMonth={row.original["requirements_history"]["last_month"]}
+              lastYear={row.original["requirements_history"]["last_year_month"]}
+            />
+          </div>
+        </td>
+        <td role="cell" className="px-2 text-left">
+          {row.cells[5].render("Cell")}
+        </td>
+        <td role="cell" className="text-center">
+          {row.cells[3].render("Cell")}
+        </td>
+      </tr>
+      {showDetails && (
+        <tr>
+          <td colSpan={7} className="relative">
+            <div
+              className="absolute cursor-pointer top-3 right-3 hover:text-gray-500"
+              onClick={() => setShowDetails(!showDetails)}
+            >
+              <FaTimes size={20} />
+            </div>
+            <ProductInfo
+              id={row.original.id}
+              description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur itaque ad laudantium velit exercitationem. A similique distinctio, aut porro cum doloremque autem reiciendis eum, id, nam animi harum fuga ea?"
+              instock={row.original.in_stock}
+              name={row.original.name}
+              price={row.original.price}
+              image="https://picsum.photos/300/200"
+              sales={row.original.sales}
+            />
+          </td>
+        </tr>
+      )}
+    </>
   );
 }
 
