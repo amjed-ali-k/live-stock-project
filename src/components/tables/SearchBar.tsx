@@ -25,9 +25,10 @@ function SearchBar({
           setValue(e.target.value);
           onChange(e.target.value);
         }}
-        placeholder={`${count} records...`}
-        className="w-full focus:outline-none"
+        placeholder={`Enter search terms here..`}
+        className="flex-grow focus:outline-none"
       />
+      <p>{preGlobalFilteredRows.length} records</p>
     </div>
   );
 }

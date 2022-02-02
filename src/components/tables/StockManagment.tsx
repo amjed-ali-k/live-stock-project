@@ -11,7 +11,6 @@ import {
 import SearchBar from "./SearchBar";
 import SelectInput from "./SelectInput";
 
-
 // {"id":1,"name":"Wine - White, Concha Y Toro","in_stock":47,"price":"$33.90","supplier":"Walter Group","sales":77,"image":"http://dummyimage.com/139x175.png/cc0000/ffffff"}
 
 function StockManagment() {
@@ -50,9 +49,12 @@ function StockManagment() {
   );
 
   React.useEffect(() => {
-    fetch('/MOCK_DATA.json').then(res => res.json()).then(dd => {setData(dd)})
-  }, [])
-
+    fetch("/MOCK_DATA.json")
+      .then((res) => res.json())
+      .then((dd) => {
+        setData(dd);
+      });
+  }, []);
 
   const data = React.useMemo(() => _data, [_data]);
 
@@ -85,11 +87,13 @@ function StockManagment() {
   );
 
   if (data.length === 0) {
-    return <>
-     <div className="w-full h-16 p-1 mx-auto my-3 border rounded-md bg-slate-300 animate-pulse"></div>
-     <div className="w-full h-16 p-1 mx-auto my-3 border rounded-md bg-slate-300 animate-pulse"></div>
-     <div className="w-full h-16 p-1 mx-auto my-3 border rounded-md bg-slate-300 animate-pulse"></div>
-    </>
+    return (
+      <>
+        <div className="w-full h-16 p-1 mx-auto my-3 border rounded-md bg-slate-300 animate-pulse"></div>
+        <div className="w-full h-16 p-1 mx-auto my-3 border rounded-md bg-slate-300 animate-pulse"></div>
+        <div className="w-full h-16 p-1 mx-auto my-3 border rounded-md bg-slate-300 animate-pulse"></div>
+      </>
+    );
   }
 
   return (
@@ -119,14 +123,16 @@ function StockManagment() {
             <DepotFilter column={headerGroups[0].headers[6]} />
           </div>
         </div>
+
         <div>
           <button
             className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
             onClick={() =>
               alert(
-                
-                 _data &&  Object.keys(cr).map((v) => `${_data[Number(v)-1].name} : ${cr[v]}`).join("\n")
-                
+                _data &&
+                  Object.keys(cr)
+                    .map((v) => `${_data[Number(v) - 1].name} : ${cr[v]}`)
+                    .join("\n")
               )
             }
           >
@@ -134,7 +140,6 @@ function StockManagment() {
           </button>
         </div>
       </div>
-
       <div className="mt-3 overflow-hidden bg-white rounded shadow-md">
         <div className="py-3">
           <h3 className="pt-2 pl-4 text-lg font-bold text-gray-700">
