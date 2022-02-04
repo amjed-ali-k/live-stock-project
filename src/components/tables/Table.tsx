@@ -179,8 +179,8 @@ function TableRow({
               <div className="text-sm font-bold ">
                 {row.cells[1].render("Cell")}
               </div>
-              <div className="text-xs font-semibold text-gray-300">
-                #{row.original.id}
+              <div className="text-xs font-semibold text-gray-400">
+                #{row.original.id} | {row.original.depot_id}
               </div>
             </div>
           </div>
